@@ -40,12 +40,19 @@ const stats = [
 ];
 
 const recentOrders = [
-  { id: "МЕБ-0241", client: "ООО «Интерьер Плюс»", product: "Шкаф-купе 3-дверный", worker: "Иванов А.С.", status: "В работе", progress: 65, deadline: "17 июня" },
-  { id: "МЕБ-0240", client: "Самойлова Е.В.", product: "Кухонный гарнитур", worker: "Петров В.И.", status: "Готово", progress: 100, deadline: "14 июня" },
-  { id: "МЕБ-0239", client: "ЗАО «Офис Групп»", product: "Стол переговорный", worker: "Сидоров Д.Р.", status: "Ожидание", progress: 20, deadline: "22 июня" },
-  { id: "МЕБ-0238", client: "Кузнецов М.Б.", product: "Гардеробная система", worker: "Романова И.С.", status: "В работе", progress: 48, deadline: "19 июня" },
-  { id: "МЕБ-0237", client: "ООО «Уют»", product: "Детская кровать-чердак", worker: "Новиков К.А.", status: "Задержка", progress: 30, deadline: "13 июня" },
+  { id: "МЕБ-0241", client: "ООО «Интерьер Плюс»", product: "Шкаф-купе 3-дверный", worker: "Иванов А.С.", status: "В работе", progress: 65, deadline: "17 июня", deadlineDays: 3 },
+  { id: "МЕБ-0240", client: "Самойлова Е.В.", product: "Кухонный гарнитур", worker: "Петров В.И.", status: "Готово", progress: 100, deadline: "14 июня", deadlineDays: 0 },
+  { id: "МЕБ-0239", client: "ЗАО «Офис Групп»", product: "Стол переговорный", worker: "Сидоров Д.Р.", status: "Ожидание", progress: 20, deadline: "22 июня", deadlineDays: 8 },
+  { id: "МЕБ-0238", client: "Кузнецов М.Б.", product: "Гардеробная система", worker: "Романова И.С.", status: "В работе", progress: 48, deadline: "19 июня", deadlineDays: 5 },
+  { id: "МЕБ-0237", client: "ООО «Уют»", product: "Детская кровать-чердак", worker: "Новиков К.А.", status: "Задержка", progress: 30, deadline: "13 июня", deadlineDays: -1 },
 ];
+
+const getDeadlineStyle = (days: number, status: string) => {
+  if (status === "Готово") return { badge: "bg-forest-light text-forest", label: "Выполнен", icon: "CheckCircle2" };
+  if (days < 0) return { badge: "bg-rose-light text-rose", label: `Просрочен на ${Math.abs(days)} д.`, icon: "AlertCircle" };
+  if (days <= 3) return { badge: "bg-amber-light text-amber", label: `Осталось ${days} д.`, icon: "Clock" };
+  return { badge: "bg-muted text-muted-foreground", label: `${days} дней`, icon: "Calendar" };
+};
 
 const statusConfig: Record<string, { bg: string; text: string; dot: string }> = {
   "В работе": { bg: "bg-sky-light", text: "text-sky", dot: "bg-sky" },
@@ -100,7 +107,7 @@ export default function Dashboard() {
                 <th className="pb-3 text-left text-xs text-muted-foreground font-medium hidden lg:table-cell">Исполнитель</th>
                 <th className="pb-3 text-left text-xs text-muted-foreground font-medium">Прогресс</th>
                 <th className="pb-3 text-left text-xs text-muted-foreground font-medium">Статус</th>
-                <th className="pb-3 text-left text-xs text-muted-foreground font-medium hidden sm:table-cell">Срок</th>
+                <th className="pb-3 text-left text-xs text-muted-foreground font-medium">Срок сдачи</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border/50">
@@ -132,7 +139,20 @@ export default function Dashboard() {
                         {order.status}
                       </span>
                     </td>
-                    <td className="py-3 text-muted-foreground text-xs hidden sm:table-cell">{order.deadline}</td>
+                    <td className="py-3">
+                      {(() => {
+                        const dl = getDeadlineStyle(order.deadlineDays, order.status);
+                        return (
+                          <div className="flex flex-col gap-1">
+                            <span className="text-xs font-medium text-foreground">{order.deadline}</span>
+                            <span className={`badge-status ${dl.badge} w-fit`}>
+                              <Icon name={dl.icon} size={10} />
+                              {dl.label}
+                            </span>
+                          </div>
+                        );
+                      })()}
+                    </td>
                   </tr>
                 );
               })}
