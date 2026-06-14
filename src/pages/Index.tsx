@@ -13,13 +13,15 @@ interface User {
   name: string;
   role: Role;
   avatar: string;
+  workerName?: string;
 }
 
-const demoUsers: Record<Role, User> = {
-  admin: { name: "Чихонадских Артём Алексеевич", role: "admin", avatar: "ЧА" },
-  manager: { name: "Сазыкин Алексей Евгеньевич", role: "manager", avatar: "СА" },
-  worker: { name: "Вовняников Константин", role: "worker", avatar: "ВК" },
-};
+const demoUsers: Array<User> = [
+  { name: "Чихонадских Артём Алексеевич", role: "admin", avatar: "ЧА" },
+  { name: "Сазыкин Алексей Евгеньевич", role: "manager", avatar: "СА" },
+  { name: "Вовняников Константин", role: "worker", avatar: "ВК", workerName: "Вовняников К." },
+  { name: "Войкин Андрей", role: "worker", avatar: "ВА", workerName: "Войкин А." },
+];
 
 const roleLabels: Record<Role, { label: string; color: string; desc: string }> = {
   admin: { label: "Администратор", color: "text-wood", desc: "Полный доступ ко всем разделам" },
@@ -29,15 +31,15 @@ const roleLabels: Record<Role, { label: string; color: string; desc: string }> =
 
 const navItems: Array<{ id: Page; label: string; icon: string; roles: Role[] }> = [
   { id: "dashboard", label: "Дашборд", icon: "LayoutDashboard", roles: ["admin", "manager"] },
-  { id: "orders", label: "Заказы", icon: "ClipboardList", roles: ["admin", "manager"] },
+  { id: "orders", label: "Заказы", icon: "ClipboardList", roles: ["admin", "manager", "worker"] },
   { id: "calendar", label: "Производство", icon: "Calendar", roles: ["admin", "manager", "worker"] },
   { id: "finance", label: "Финансы", icon: "BarChart3", roles: ["admin", "manager"] },
   { id: "warehouse", label: "Склад", icon: "Package", roles: ["admin", "manager", "worker"] },
   { id: "settings", label: "Настройки", icon: "Settings", roles: ["admin"] },
 ];
 
-function LoginScreen({ onLogin }: { onLogin: (role: Role) => void }) {
-  const [selected, setSelected] = useState<Role>("admin");
+function LoginScreen({ onLogin }: { onLogin: (user: User) => void }) {
+  const [selectedIdx, setSelectedIdx] = useState(0);
 
   return (
     <div
@@ -64,22 +66,21 @@ function LoginScreen({ onLogin }: { onLogin: (role: Role) => void }) {
           <p className="text-xs text-muted-foreground mb-5">Демо-версия с разными уровнями доступа</p>
 
           <div className="space-y-2 mb-6">
-            {(Object.keys(demoUsers) as Role[]).map((role) => {
-              const u = demoUsers[role];
-              const cfg = roleLabels[role];
+            {demoUsers.map((u, idx) => {
+              const cfg = roleLabels[u.role];
               return (
                 <button
-                  key={role}
-                  onClick={() => setSelected(role)}
+                  key={idx}
+                  onClick={() => setSelectedIdx(idx)}
                   className={`w-full flex items-center gap-3 p-3.5 rounded-xl border transition-all text-left
-                    ${selected === role
+                    ${selectedIdx === idx
                       ? "border-wood/40 bg-wood-pale shadow-sm"
                       : "border-border bg-white/40 hover:bg-white/70"
                     }`}
                 >
                   <div
                     className={`w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold
-                    ${selected === role ? "bg-wood text-white" : "bg-sand text-muted-foreground"}`}
+                    ${selectedIdx === idx ? "bg-wood text-white" : "bg-sand text-muted-foreground"}`}
                   >
                     {u.avatar}
                   </div>
@@ -88,7 +89,7 @@ function LoginScreen({ onLogin }: { onLogin: (role: Role) => void }) {
                     <p className={`text-xs font-medium ${cfg.color}`}>{cfg.label}</p>
                     <p className="text-xs text-muted-foreground">{cfg.desc}</p>
                   </div>
-                  {selected === role && (
+                  {selectedIdx === idx && (
                     <Icon name="CheckCircle2" size={18} className="text-wood flex-shrink-0" />
                   )}
                 </button>
@@ -97,7 +98,7 @@ function LoginScreen({ onLogin }: { onLogin: (role: Role) => void }) {
           </div>
 
           <button
-            onClick={() => onLogin(selected)}
+            onClick={() => onLogin(demoUsers[selectedIdx])}
             className="w-full py-3 rounded-xl font-medium text-sm text-white transition-all hover:opacity-90 active:scale-[0.98]"
             style={{ background: "linear-gradient(135deg, hsl(25 45% 38%), hsl(25 50% 52%))" }}
           >
@@ -168,9 +169,9 @@ export default function Index() {
   if (!user) {
     return (
       <LoginScreen
-        onLogin={(role) => {
-          setUser(demoUsers[role]);
-          setPage(role === "worker" ? "calendar" : "dashboard");
+        onLogin={(u) => {
+          setUser(u);
+          setPage(u.role === "worker" ? "orders" : "dashboard");
         }}
       />
     );
@@ -181,7 +182,7 @@ export default function Index() {
   const renderPage = () => {
     switch (page) {
       case "dashboard": return <Dashboard />;
-      case "orders": return <Orders />;
+      case "orders": return <Orders workerName={user.workerName} />;
       case "calendar": return <ProductionCalendar />;
       case "finance": return <Finance />;
       case "warehouse": return <Warehouse workerMode={user.role === "worker"} />;

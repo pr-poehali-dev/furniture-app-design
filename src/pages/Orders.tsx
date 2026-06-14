@@ -37,13 +37,17 @@ const fmt = (n: number) => n.toLocaleString("ru-RU") + " ₽";
 const STATUSES: Status[] = ["all", "В работе", "Ожидание", "Задержка", "Готово"];
 const STATUS_LABELS: Record<Status, string> = { all: "Все", "В работе": "В работе", "Ожидание": "Ожидание", "Задержка": "Задержка", "Готово": "Готово" };
 
-export default function Orders() {
+export default function Orders({ workerName }: { workerName?: string }) {
   const [statusFilter, setStatusFilter] = useState<Status>("all");
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"deadline" | "income" | "progress">("deadline");
   const [selected, setSelected] = useState<string | null>(null);
 
-  const filtered = allOrders
+  const visibleOrders = workerName
+    ? allOrders.filter(o => o.worker === workerName)
+    : allOrders;
+
+  const filtered = visibleOrders
     .filter((o) => {
       const matchStatus = statusFilter === "all" || o.status === statusFilter;
       const matchSearch = !search || o.id.toLowerCase().includes(search.toLowerCase()) || o.client.toLowerCase().includes(search.toLowerCase()) || o.product.toLowerCase().includes(search.toLowerCase());
@@ -57,26 +61,32 @@ export default function Orders() {
     });
 
   const counts = {
-    all: allOrders.length,
-    "В работе": allOrders.filter(o => o.status === "В работе").length,
-    "Ожидание": allOrders.filter(o => o.status === "Ожидание").length,
-    "Задержка": allOrders.filter(o => o.status === "Задержка").length,
-    "Готово": allOrders.filter(o => o.status === "Готово").length,
+    all: visibleOrders.length,
+    "В работе": visibleOrders.filter(o => o.status === "В работе").length,
+    "Ожидание": visibleOrders.filter(o => o.status === "Ожидание").length,
+    "Задержка": visibleOrders.filter(o => o.status === "Задержка").length,
+    "Готово": visibleOrders.filter(o => o.status === "Готово").length,
   };
 
-  const selectedOrder = allOrders.find(o => o.id === selected);
+  const selectedOrder = visibleOrders.find(o => o.id === selected);
 
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="font-cormorant text-3xl font-semibold text-foreground">Заказы</h1>
-          <p className="text-muted-foreground mt-1 text-sm">{allOrders.length} заказов · {counts["Задержка"]} с задержкой</p>
+          <h1 className="font-cormorant text-3xl font-semibold text-foreground">
+            {workerName ? "Мои заказы" : "Заказы"}
+          </h1>
+          <p className="text-muted-foreground mt-1 text-sm">
+            {workerName ? `${workerName} · ` : ""}{visibleOrders.length} заказов · {counts["Задержка"]} с задержкой
+          </p>
         </div>
-        <button className="flex items-center gap-2 bg-wood text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-wood/90 transition-colors shadow-sm">
-          <Icon name="Plus" size={16} />
-          Новый заказ
-        </button>
+        {!workerName && (
+          <button className="flex items-center gap-2 bg-wood text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-wood/90 transition-colors shadow-sm">
+            <Icon name="Plus" size={16} />
+            Новый заказ
+          </button>
+        )}
       </div>
 
       {/* Status filter tabs */}
