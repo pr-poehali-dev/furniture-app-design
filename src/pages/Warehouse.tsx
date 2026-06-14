@@ -37,7 +37,7 @@ const getStockStatus = (qty: number, min: number) => {
 
 const fmt = (n: number) => n.toLocaleString("ru-RU") + " ₽";
 
-export default function Warehouse() {
+export default function Warehouse({ workerMode = false }: { workerMode?: boolean }) {
   const [tab, setTab] = useState<Tab>("stock");
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -62,12 +62,16 @@ export default function Warehouse() {
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="font-cormorant text-3xl font-semibold text-foreground">Склад</h1>
-          <p className="text-muted-foreground mt-1 text-sm">Учёт материалов и история движения товаров</p>
+          <p className="text-muted-foreground mt-1 text-sm">
+            {workerMode ? "Наличие материалов на складе" : "Учёт материалов и история движения товаров"}
+          </p>
         </div>
-        <button className="flex items-center gap-2 bg-wood text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-wood/90 transition-colors shadow-sm">
-          <Icon name="Plus" size={16} />
-          Приход товара
-        </button>
+        {!workerMode && (
+          <button className="flex items-center gap-2 bg-wood text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-wood/90 transition-colors shadow-sm">
+            <Icon name="Plus" size={16} />
+            Приход товара
+          </button>
+        )}
       </div>
 
       {/* Summary */}
@@ -76,7 +80,7 @@ export default function Warehouse() {
           { label: "Позиций", value: stockItems.length, icon: "Package", color: "bg-wood-pale", iconColor: "text-wood" },
           { label: "Категорий", value: totalCategories, icon: "FolderOpen", color: "bg-sky-light", iconColor: "text-sky" },
           { label: "На исходе", value: lowStock, icon: "AlertTriangle", color: "bg-rose-light", iconColor: "text-rose" },
-          { label: "Поступлений", value: historyItems.filter(h => h.type === "arrival").length, icon: "ArrowDownToLine", color: "bg-forest-light", iconColor: "text-forest" },
+          ...(!workerMode ? [{ label: "Поступлений", value: historyItems.filter(h => h.type === "arrival").length, icon: "ArrowDownToLine", color: "bg-forest-light", iconColor: "text-forest" }] : []),
         ].map((s, i) => (
           <div key={s.label} className={`card-soft rounded-2xl p-4 animate-slide-up stagger-${i + 1}`} style={{ animationFillMode: "both" }}>
             <div className="flex items-center gap-3">
@@ -102,12 +106,14 @@ export default function Warehouse() {
             >
               Остатки
             </button>
-            <button
-              onClick={() => setTab("history")}
-              className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${tab === "history" ? "bg-white shadow-sm text-foreground" : "text-muted-foreground"}`}
-            >
-              История прихода
-            </button>
+            {!workerMode && (
+              <button
+                onClick={() => setTab("history")}
+                className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${tab === "history" ? "bg-white shadow-sm text-foreground" : "text-muted-foreground"}`}
+              >
+                История прихода
+              </button>
+            )}
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             {tab === "stock" && (

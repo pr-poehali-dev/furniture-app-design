@@ -4,9 +4,10 @@ import Dashboard from "./Dashboard";
 import ProductionCalendar from "./ProductionCalendar";
 import Finance from "./Finance";
 import Warehouse from "./Warehouse";
+import Orders from "./Orders";
 
 type Role = "admin" | "manager" | "worker";
-type Page = "dashboard" | "calendar" | "finance" | "warehouse" | "settings";
+type Page = "dashboard" | "orders" | "calendar" | "finance" | "warehouse" | "settings";
 
 interface User {
   name: string;
@@ -23,14 +24,15 @@ const demoUsers: Record<Role, User> = {
 const roleLabels: Record<Role, { label: string; color: string; desc: string }> = {
   admin: { label: "Администратор", color: "text-wood", desc: "Полный доступ ко всем разделам" },
   manager: { label: "Менеджер", color: "text-forest", desc: "Заказы, финансы, склад" },
-  worker: { label: "Работник", color: "text-sky", desc: "Только календарь и задачи" },
+  worker: { label: "Работник", color: "text-sky", desc: "Производство и просмотр склада" },
 };
 
 const navItems: Array<{ id: Page; label: string; icon: string; roles: Role[] }> = [
   { id: "dashboard", label: "Дашборд", icon: "LayoutDashboard", roles: ["admin", "manager"] },
+  { id: "orders", label: "Заказы", icon: "ClipboardList", roles: ["admin", "manager"] },
   { id: "calendar", label: "Производство", icon: "Calendar", roles: ["admin", "manager", "worker"] },
   { id: "finance", label: "Финансы", icon: "BarChart3", roles: ["admin", "manager"] },
-  { id: "warehouse", label: "Склад", icon: "Package", roles: ["admin", "manager"] },
+  { id: "warehouse", label: "Склад", icon: "Package", roles: ["admin", "manager", "worker"] },
   { id: "settings", label: "Настройки", icon: "Settings", roles: ["admin"] },
 ];
 
@@ -179,9 +181,10 @@ export default function Index() {
   const renderPage = () => {
     switch (page) {
       case "dashboard": return <Dashboard />;
+      case "orders": return <Orders />;
       case "calendar": return <ProductionCalendar />;
       case "finance": return <Finance />;
-      case "warehouse": return <Warehouse />;
+      case "warehouse": return <Warehouse workerMode={user.role === "worker"} />;
       case "settings": return <SettingsPage />;
       default: return <Dashboard />;
     }
