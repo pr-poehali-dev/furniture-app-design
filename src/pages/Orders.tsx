@@ -4,18 +4,18 @@ import Icon from "@/components/ui/icon";
 type Status = "all" | "В работе" | "Готово" | "Ожидание" | "Задержка";
 
 const allOrders = [
-  { id: "МЕБ-0241", client: "ООО «Интерьер Плюс»", product: "Шкаф-купе 3-дверный", worker: "Иванов А.С.", status: "В работе", progress: 65, deadline: "17 июня", deadlineDays: 3, income: 85000, created: "01.06.2026" },
-  { id: "МЕБ-0240", client: "Самойлова Е.В.", product: "Кухонный гарнитур", worker: "Петров В.И.", status: "Готово", progress: 100, deadline: "14 июня", deadlineDays: 0, income: 120000, created: "28.05.2026" },
+  { id: "МЕБ-0241", client: "ООО «Интерьер Плюс»", product: "Шкаф-купе 3-дверный", worker: "Вовняников К.", status: "В работе", progress: 65, deadline: "17 июня", deadlineDays: 3, income: 85000, created: "01.06.2026" },
+  { id: "МЕБ-0240", client: "Самойлова Е.В.", product: "Кухонный гарнитур", worker: "Войкин А.", status: "Готово", progress: 100, deadline: "14 июня", deadlineDays: 0, income: 120000, created: "28.05.2026" },
   { id: "МЕБ-0239", client: "ЗАО «Офис Групп»", product: "Стол переговорный", worker: "Сидоров Д.Р.", status: "Ожидание", progress: 20, deadline: "22 июня", deadlineDays: 8, income: 45000, created: "10.06.2026" },
   { id: "МЕБ-0238", client: "Кузнецов М.Б.", product: "Гардеробная система", worker: "Романова И.С.", status: "В работе", progress: 48, deadline: "19 июня", deadlineDays: 5, income: 95000, created: "05.06.2026" },
   { id: "МЕБ-0237", client: "ООО «Уют»", product: "Детская кровать-чердак", worker: "Новиков К.А.", status: "Задержка", progress: 30, deadline: "13 июня", deadlineDays: -1, income: 55000, created: "03.06.2026" },
-  { id: "МЕБ-0236", client: "Миронова Д.А.", product: "Прихожая с зеркалом", worker: "Иванов А.С.", status: "Готово", progress: 100, deadline: "12 июня", deadlineDays: 0, income: 38000, created: "25.05.2026" },
-  { id: "МЕБ-0235", client: "ИП Захаров", product: "Торговое оборудование", worker: "Петров В.И.", status: "Готово", progress: 100, deadline: "10 июня", deadlineDays: 0, income: 210000, created: "20.05.2026" },
+  { id: "МЕБ-0236", client: "Миронова Д.А.", product: "Прихожая с зеркалом", worker: "Вовняников К.", status: "Готово", progress: 100, deadline: "12 июня", deadlineDays: 0, income: 38000, created: "25.05.2026" },
+  { id: "МЕБ-0235", client: "ИП Захаров", product: "Торговое оборудование", worker: "Войкин А.", status: "Готово", progress: 100, deadline: "10 июня", deadlineDays: 0, income: 210000, created: "20.05.2026" },
   { id: "МЕБ-0234", client: "Королёва Н.И.", product: "Шкаф-купе угловой", worker: "Сидоров Д.Р.", status: "Готово", progress: 100, deadline: "08 июня", deadlineDays: 0, income: 72000, created: "18.05.2026" },
-  { id: "МЕБ-0233", client: "ООО «СтройДом»", product: "Стеллаж офисный 5-секционный", worker: "Романова И.С.", status: "В работе", progress: 75, deadline: "16 июня", deadlineDays: 2, income: 67000, created: "07.06.2026" },
-  { id: "МЕБ-0232", client: "Белова Т.С.", product: "Комод 6-ящичный", worker: "Новиков К.А.", status: "Ожидание", progress: 5, deadline: "25 июня", deadlineDays: 11, income: 28000, created: "12.06.2026" },
-  { id: "МЕБ-0231", client: "ИП Громов К.Р.", product: "Барная стойка", worker: "Иванов А.С.", status: "Задержка", progress: 55, deadline: "11 июня", deadlineDays: -3, income: 89000, created: "01.06.2026" },
-  { id: "МЕБ-0230", client: "Школа №42", product: "Мебель для кабинета (12 парт)", worker: "Петров В.И.", status: "В работе", progress: 40, deadline: "20 июня", deadlineDays: 6, income: 156000, created: "04.06.2026" },
+  { id: "МЕБ-0233", client: "ООО «СтройДом»", product: "Стеллаж офисный 5-секционный", worker: "Вовняников К.", status: "В работе", progress: 75, deadline: "16 июня", deadlineDays: 2, income: 67000, created: "07.06.2026" },
+  { id: "МЕБ-0232", client: "Белова Т.С.", product: "Комод 6-ящичный", worker: "Войкин А.", status: "Ожидание", progress: 5, deadline: "25 июня", deadlineDays: 11, income: 28000, created: "12.06.2026" },
+  { id: "МЕБ-0231", client: "ИП Громов К.Р.", product: "Барная стойка", worker: "Вовняников К.", status: "Задержка", progress: 55, deadline: "11 июня", deadlineDays: -3, income: 89000, created: "01.06.2026" },
+  { id: "МЕБ-0230", client: "Школа №42", product: "Мебель для кабинета (12 парт)", worker: "Войкин А.", status: "В работе", progress: 40, deadline: "20 июня", deadlineDays: 6, income: 156000, created: "04.06.2026" },
 ];
 
 const statusConfig: Record<string, { bg: string; text: string; dot: string }> = {

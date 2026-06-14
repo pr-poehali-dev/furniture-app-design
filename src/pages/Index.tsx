@@ -16,9 +16,9 @@ interface User {
 }
 
 const demoUsers: Record<Role, User> = {
-  admin: { name: "Светлана Орлова", role: "admin", avatar: "СО" },
-  manager: { name: "Артём Волков", role: "manager", avatar: "АВ" },
-  worker: { name: "Иванов А.С.", role: "worker", avatar: "ИА" },
+  admin: { name: "Чихонадских Артём Алексеевич", role: "admin", avatar: "ЧА" },
+  manager: { name: "Сазыкин Алексей Евгеньевич", role: "manager", avatar: "СА" },
+  worker: { name: "Вовняников Константин", role: "worker", avatar: "ВК" },
 };
 
 const roleLabels: Record<Role, { label: string; color: string; desc: string }> = {

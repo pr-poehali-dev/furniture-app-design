@@ -40,8 +40,8 @@ const stats = [
 ];
 
 const recentOrders = [
-  { id: "МЕБ-0241", client: "ООО «Интерьер Плюс»", product: "Шкаф-купе 3-дверный", worker: "Иванов А.С.", status: "В работе", progress: 65, deadline: "17 июня", deadlineDays: 3 },
-  { id: "МЕБ-0240", client: "Самойлова Е.В.", product: "Кухонный гарнитур", worker: "Петров В.И.", status: "Готово", progress: 100, deadline: "14 июня", deadlineDays: 0 },
+  { id: "МЕБ-0241", client: "ООО «Интерьер Плюс»", product: "Шкаф-купе 3-дверный", worker: "Вовняников К.", status: "В работе", progress: 65, deadline: "17 июня", deadlineDays: 3 },
+  { id: "МЕБ-0240", client: "Самойлова Е.В.", product: "Кухонный гарнитур", worker: "Войкин А.", status: "Готово", progress: 100, deadline: "14 июня", deadlineDays: 0 },
   { id: "МЕБ-0239", client: "ЗАО «Офис Групп»", product: "Стол переговорный", worker: "Сидоров Д.Р.", status: "Ожидание", progress: 20, deadline: "22 июня", deadlineDays: 8 },
   { id: "МЕБ-0238", client: "Кузнецов М.Б.", product: "Гардеробная система", worker: "Романова И.С.", status: "В работе", progress: 48, deadline: "19 июня", deadlineDays: 5 },
   { id: "МЕБ-0237", client: "ООО «Уют»", product: "Детская кровать-чердак", worker: "Новиков К.А.", status: "Задержка", progress: 30, deadline: "13 июня", deadlineDays: -1 },
