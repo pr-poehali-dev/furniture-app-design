@@ -55,7 +55,7 @@ function LoginScreen({ onLogin }: { onLogin: (role: Role) => void }) {
           >
             <Icon name="Sofa" size={26} className="text-white" />
           </div>
-          <h1 className="font-cormorant text-3xl font-semibold text-foreground">МебельПро</h1>
+          <h1 className="font-cormorant text-3xl font-semibold text-foreground">Честная мебель</h1>
           <p className="text-sm text-muted-foreground mt-1">Система управления производством</p>
         </div>
 
@@ -218,7 +218,7 @@ export default function Index() {
             <Icon name="Sofa" size={16} className="text-white" />
           </div>
           <div>
-            <p className="font-semibold text-sm text-foreground leading-tight">МебельПро</p>
+            <p className="font-semibold text-sm text-foreground leading-tight">Честная мебель</p>
             <p className="text-xs text-muted-foreground">Производство</p>
           </div>
         </div>
