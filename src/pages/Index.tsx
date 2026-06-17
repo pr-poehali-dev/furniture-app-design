@@ -17,7 +17,7 @@ interface User {
 }
 
 const demoUsers: Array<User> = [
-  { name: "Чихонадских Артём Алексеевич", role: "admin", avatar: "ЧА" },
+  { name: "Чихонадский Артём Алексеевич", role: "admin", avatar: "ЧА" },
   { name: "Сазыкин Алексей Евгеньевич", role: "manager", avatar: "СА" },
   { name: "Вовняников Константин", role: "worker", avatar: "ВК", workerName: "Вовняников К." },
   { name: "Войкин Андрей", role: "worker", avatar: "ВА", workerName: "Войкин А." },
